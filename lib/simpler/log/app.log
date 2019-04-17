@@ -1,0 +1,22 @@
+# Logfile created on 2019-04-17 15:03:49 +0300 by logger.rb/66358
+I, [2019-04-17T15:03:52.046437 #54020]  INFO -- : Request: GET /tests/2
+Handler: TestsController#show
+
+I, [2019-04-17T15:12:01.112954 #71306]  INFO -- : Request: GET /tests/2
+Handler: TestsController#show
+Parameters: {:id=>"2"}Response: 200 [text/plain] 
+
+I, [2019-04-17T15:12:14.760009 #71306]  INFO -- : Request: GET /tests/2
+Handler: TestsController#show
+Parameters: {:id=>"2"}Response: 200 [text/plain] 
+
+I, [2019-04-17T15:13:29.147386 #71306]  INFO -- : Request: GET /tests/2
+Handler: TestsController#show
+Parameters: {:id=>"2"}Response: 200 [text/plain] 
+
+I, [2019-04-17T15:13:40.193711 #73244]  INFO -- : 
+Request: GET /tests/2
+Handler: TestsController#show
+Parameters: {:id=>"2"}
+Response: 200 [text/plain] 
+

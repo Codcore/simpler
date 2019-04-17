@@ -28,7 +28,8 @@ module Simpler
 
         router_path_array.each_with_index do |part, i|
           if part.match?(params_regexp)
-            @params[router_path_array[i]] = request_path_array[i]
+            key = router_path_array[i][1..-1].to_sym
+            @params[key] = request_path_array[i]
           else
             return false unless part == request_path_array[i]
           end
