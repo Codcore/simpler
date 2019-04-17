@@ -6,7 +6,10 @@ class TestsController < Simpler::Controller
   end
 
   def create
+  end
 
+  def show
+    render plain: params.to_s
   end
 
 end

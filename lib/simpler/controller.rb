@@ -22,6 +22,10 @@ module Simpler
       @response.finish
     end
 
+    def params
+      @request.params
+    end
+
     private
 
     def extract_name
@@ -33,27 +37,27 @@ module Simpler
     end
 
     def write_response
-      body = render_body
-
-      @response.write(body)
+      unless @response.body.any?
+        body = render_body
+        @response.write(body)
+      end
     end
 
     def render_body
       View.new(@request.env).render(binding)
     end
 
-    def params
-      @request.params
-    end
-
     def render(template)
-      @request.env['simpler.template'] = template
 
       if template.is_a?(Hash)
         case template.keys.first
         when :plain
           @response['Content-Type'] = 'text/plain'
+          @response.write(template[:plain])
+          @response.finish
         end
+      else
+        @request.env['simpler.template'] = template
       end
     end
 
