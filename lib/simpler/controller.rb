@@ -14,12 +14,17 @@ module Simpler
     def make_response(action)
       @request.env['simpler.controller'] = self
       @request.env['simpler.action'] = action
+      @request.env['simpler.params'] = params
 
       set_default_headers
       send(action)
       write_response
 
       @response.finish
+    end
+
+    def params
+      @request.params
     end
 
     private
@@ -33,22 +38,36 @@ module Simpler
     end
 
     def write_response
-      body = render_body
-
-      @response.write(body)
+      unless @response.body.any?
+        body = render_body
+        @response.write(body)
+      end
     end
 
     def render_body
       View.new(@request.env).render(binding)
     end
 
-    def params
-      @request.params
-    end
-
     def render(template)
-      @request.env['simpler.template'] = template
+
+      if template.is_a?(Hash)
+        case template.keys.first
+        when :plain
+          @response['Content-Type'] = 'text/plain'
+          @response.write(template[:plain])
+          @response.finish
+        end
+      else
+        @request.env['simpler.template'] = template
+      end
     end
 
+    def status(code)
+      @response.status = code
+    end
+
+    def headers
+      @response
+    end
   end
 end

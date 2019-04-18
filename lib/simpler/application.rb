@@ -3,6 +3,7 @@ require 'singleton'
 require 'sequel'
 require_relative 'router'
 require_relative 'controller'
+require_relative 'errors'
 
 module Simpler
   class Application
@@ -27,8 +28,14 @@ module Simpler
     end
 
     def call(env)
-      route = @router.route_for(env)
+      begin
+        route = @router.route_for(env)
+      rescue Errors::NotFoundError
+        return make_404_response
+      end
+
       controller = route.controller.new(env)
+      controller.params.merge!(route.params)
       action = route.action
 
       make_response(controller, action)
@@ -54,5 +61,11 @@ module Simpler
       controller.make_response(action)
     end
 
+    def make_404_response
+      response = Rack::Response.new
+      response.status = 404
+      response.write("Not Found / Error 404")
+      response.finish
+    end
   end
 end
